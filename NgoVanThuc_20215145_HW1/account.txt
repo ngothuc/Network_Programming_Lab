@@ -1,0 +1,17 @@
+user1 a user1@gmail.com 1234567890 1
+user2 pass2 user2@gmail.com 0987654321 0
+meomeo meomeo 123 123 1
+ngothuc 1 ngothuc0704@gmail.com 0362253683 1
+ahihi ahihi ahihi ahihi 1
+tl tl 1 2 1
+1 aaa 123 123sdt 1
+2 2 2 2 0
+abc dsdadasd asdasdadasd adasdasd 1
+user007 user007 user007 user007 0
+test test test test 1
+ds-thuc-ngo ds-thuc-ngo thuc-ngo@dimage.co.jp 123456 1
+phudan phudan 123 123 1
+spam1 spam1 sp sp 1
+aaa aaa aaa aaa 0
+demo1 qwe demodemo@gmail.com 0123 1
+spam2 spam2 email@email.com 123 1
