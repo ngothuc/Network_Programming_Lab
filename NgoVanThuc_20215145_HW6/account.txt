@@ -1,0 +1,4 @@
+meongu 1 1 0
+meogay 1 0 0
+meobeo 1 1 0
+test 0 0 0

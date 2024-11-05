@@ -1,0 +1,3 @@
+THLTM Note:
+- Xử lý khi mất mạng
+- Check timestamp
