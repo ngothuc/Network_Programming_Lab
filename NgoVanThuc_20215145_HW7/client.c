@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
             buffer[bytes_received] = '\0';
             printf("Response from server: %s\n", buffer);
 
-            if (strcmp(buffer, "Logout successful") == 0) {
+            if (strcmp(buffer, "Logout successful\n") == 0) {
                 printf("Logout successfully\n");
                 close(sockfd);
                 return 0;

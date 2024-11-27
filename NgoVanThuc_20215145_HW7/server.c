@@ -23,8 +23,9 @@ void* handle_client(void* arg) {
         buffer[bytes_received] = '\0';
 
         if (strcmp(buffer, "logout") == 0) {
+            printf("Client %d logout\n", client_sock);
             logout(client_sock);
-            strcpy(buffer, "Logout successful");
+            strcpy(buffer, "Logout successful\n");
             send(client_sock, buffer, strlen(buffer), 0);
             break;
         }
@@ -44,9 +45,9 @@ void* handle_client(void* arg) {
             strcpy(buffer, "Account not ready");
         }
 
+        printf("Client %d: %s\n", client_sock, buffer);
         send(client_sock, buffer, strlen(buffer), 0);
 
-        if (status == 1 || status == 3) break;
     }
     close(client_sock);
     return NULL;
