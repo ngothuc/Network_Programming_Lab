@@ -7,7 +7,6 @@
 #define BLOCK_STATUS 0
 
 Account *accountListHead = NULL;
-Account *loginAccount = NULL;
 
 void readAccountFromFile()
 {
@@ -23,37 +22,33 @@ void readAccountFromFile()
     {
         newAccount = (Account *)malloc(sizeof(Account));
         fscanf(file, "%s %s %d %d", newAccount->username, newAccount->password, &newAccount->status, &newAccount->loginError);
-        // newAccount->loginError = 0;
+        newAccount->client_sock = -1; // Khởi tạo client_sock là -1
         newAccount->next = accountListHead;
         accountListHead = newAccount;
     }
     fclose(file);
 }
 
-int checkAccount(char *username, char *password)
+int checkAccount(char *username, char *password, int client_sock)
 {
     for (Account *tmp = accountListHead; tmp != NULL; tmp = tmp->next)
     {
         if (strcmp(tmp->username, username) == 0 && strcmp(tmp->password, password) == 0)
-        // Nhập đúng cả tài khoản và mật khẩu
         {
             if (tmp->status == ACTIVE_STATUS)
             {
-                // chưa bị khóa thì trả về 1
-                login(tmp);
+                tmp->client_sock = client_sock; // Gán client_sock cho tài khoản
                 tmp->loginError = 0;
                 updateAccountFile(tmp);
                 return 1;
             }
             else
             {
-                // bị khóa thì trả về -1
                 return -1;
             }
         }
         if (strcmp(tmp->username, username) == 0)
         {
-            // đúng tài khoản, sai mật khẩu
             tmp->loginError++;
             if (tmp->loginError >= 3)
             {
@@ -65,13 +60,11 @@ int checkAccount(char *username, char *password)
             return 2;
         }
     }
-    // mặc định trả về 0
     return 0;
 }
 
 void updateAccountFile(Account *account)
 {
-
     char username[50], password[50];
     int loginError, status;
 
@@ -105,10 +98,17 @@ void updateAccountFile(Account *account)
 
 void login(Account *account)
 {
-    loginAccount = account;
+    // Không cần thay đổi
 }
 
-void logout()
+void logout(int client_sock)
 {
-    loginAccount = NULL;
+    for (Account *tmp = accountListHead; tmp != NULL; tmp = tmp->next)
+    {
+        if (tmp->client_sock == client_sock)
+        {
+            tmp->client_sock = -1; // Đặt lại client_sock khi logout
+            break;
+        }
+    }
 }

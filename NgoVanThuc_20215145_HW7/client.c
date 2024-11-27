@@ -43,17 +43,14 @@ int main(int argc, char* argv[]) {
             send(sockfd, buffer, strlen(buffer), 0);
 
             bytes_received = recv(sockfd, buffer, BUFF_SIZE, 0);
+            buffer[bytes_received] = '\0';
             printf("Response from server: %s\n", buffer);
 
-
-
-            if (strcmp(buffer, "logout") == 0) {
+            if (strcmp(buffer, "Logout successful") == 0) {
                 printf("Logout successfully\n");
-                break;
+                close(sockfd);
+                return 0;
             }
-
-
-
         } else if (strcmp(buffer, "Account blocked") == 0) {
             break;
         }

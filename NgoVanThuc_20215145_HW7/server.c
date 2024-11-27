@@ -23,7 +23,7 @@ void* handle_client(void* arg) {
         buffer[bytes_received] = '\0';
 
         if (strcmp(buffer, "logout") == 0) {
-            logout();
+            logout(client_sock);
             strcpy(buffer, "Logout successful");
             send(client_sock, buffer, strlen(buffer), 0);
             break;
@@ -31,7 +31,7 @@ void* handle_client(void* arg) {
 
         sscanf(buffer, "%s %s", username, password);
 
-        int status = checkAccount(username, password);
+        int status = checkAccount(username, password, client_sock);
         if (status == 1) {
             strcpy(buffer, "OK");
         } else if (status == 0) {
