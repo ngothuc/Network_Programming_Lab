@@ -5,8 +5,8 @@ meongu 1 1 0
 meogay 1 0 2
 meobeo 1 1 0
 test 0 0 0
-chiduong meoxinh 1 0
-ngothuc 1 1 0
+chiduong qe123bcv 1 0
+ngothuc 123ed12 1 0
 ducphu 1 0 3
 luandinh 1 2 1
 duongioi 1 1 1

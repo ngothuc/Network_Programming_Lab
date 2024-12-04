@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <pthread.h>
+#include <ctype.h>
 #include "account.h"
 
 #define BUFF_SIZE 1024
@@ -18,6 +19,38 @@ char *receiveMessage(int client_sock)
         return NULL;
     buffer[bytes_received] = '\0';
     return strdup(buffer);
+}
+
+int isValidPassword(char *password)
+{
+    for (int i = 0; i < strlen(password); i++)
+    {
+        char c = password[i];
+        if (!isalnum(c))
+        {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+void splitPassword(char *password, char *letters, char *digits)
+{
+    int l = 0, d = 0;
+    for (int i = 0; i < strlen(password); i++)
+    {
+        char c = password[i];
+        if (isalpha(c))
+        {
+            letters[l++] = c;
+        }
+        else if (isdigit(c))
+        {
+            digits[d++] = c;
+        }
+    }
+    letters[l] = '\0';
+    digits[d] = '\0';
 }
 
 void *handle_client(void *arg)
@@ -45,7 +78,6 @@ void *handle_client(void *arg)
             {
                 send(client_sock, "Enter password: ", 16, 0);
                 char *password = receiveMessage(client_sock);
-                //printf("Password: %s from port %d\n", password, client_sock);
                 status = checkAccount(username, password, client_sock);
 
                 if (status == 2)
@@ -76,9 +108,24 @@ void *handle_client(void *arg)
                     }
                     else
                     {
-                        printf("Account %s send update password to %s\n", username, command);
-                        updateAccountPassword(username, command);
-                        send(client_sock, "Update password successful\n", 27, 0);
+                        if (isValidPassword(command))
+                        {
+                            printf("Account %s send update password to %s\n", username, command);
+                            updateAccountPassword(username, command);
+                            char letters[BUFF_SIZE], digits[BUFF_SIZE];
+                            splitPassword(command, letters, digits);
+                            char response[BUFF_SIZE];
+                            strcat(response, "Changed password\n");
+                            // send(client_sock, letters, strlen(letters), 0);
+                            // send(client_sock, digits, strlen(digits), 0);
+                            strcat(response, "Letters: "); strcat(response, letters);
+                            strcat(response, "\nDigits: "); strcat(response, digits);
+                            send(client_sock, response, strlen(response), 0);
+                        }
+                        else
+                        {
+                            send(client_sock, "Invalid password format\n", 24, 0);
+                        }
                     }
                 }
             }

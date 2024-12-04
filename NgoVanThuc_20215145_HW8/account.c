@@ -54,6 +54,7 @@ int checkAccount(char *username, char *password, int client_sock)
             else
             {
                 return -1;
+                
             }
         }
         if (strcmp(tmp->username, username) == 0)

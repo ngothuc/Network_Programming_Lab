@@ -74,12 +74,19 @@ int main(int argc, char *argv[])
                             printf("Logout successfully\n");
                             close(sockfd);
                             return 0;
-                        } else if (strcat(command_response, "Update password successful\n") == 0)
-                        {
-                            printf("Update password successfully\n");
-                            continue;
                         }
-                        
+                        else if (strcmp(command_response, "Invalid password format\n") == 0)
+                        {
+                            printf("Invalid password format. Password must contain only letters and digits.\n");
+                        }
+                        else if (strcmp(command_response, "Changed password\n") == 0)
+                        {
+                            char *letters = receiveMessage(sockfd);
+                            char *digits = receiveMessage(sockfd);
+                            printf("Password updated successfully.\nLetters: %s\nDigits: %s\n", letters, digits);
+                            free(letters);
+                            free(digits);
+                        }
                     }
                 }
                 else if (strcmp(tmp, "Invalid password") == 0)
